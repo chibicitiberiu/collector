@@ -2,12 +2,12 @@ import config
 import database
 import signal
 from threading import Event
-from plugins.cpu_plugin import CpuPlugin
-from plugins.memory_plugin import MemoryPlugin
-from plugins.disk_plugin import DiskPlugin
-from plugins.network_plugin import NetworkPlugin
-from plugins.temperatures_plugin import TemperaturesPlugin
-from plugins.ping_plugin import PingPlugin
+from plugins.system.cpu_plugin import CpuPlugin
+from plugins.system.memory_plugin import MemoryPlugin
+from plugins.system.disk_plugin import DiskPlugin
+from plugins.system.network_plugin import NetworkPlugin
+from plugins.system.temperatures_plugin import TemperaturesPlugin
+from plugins.system.ping_plugin import PingPlugin
 
 class Collector(object):
 

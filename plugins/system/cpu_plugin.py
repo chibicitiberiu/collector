@@ -6,8 +6,7 @@ from playhouse.shortcuts import model_to_dict
 
 import config
 from database import BaseModel
-
-from .plugin import Plugin
+from plugins.plugin import Plugin
 
 
 class Cpu(BaseModel):

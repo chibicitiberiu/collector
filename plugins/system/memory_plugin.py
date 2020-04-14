@@ -5,8 +5,7 @@ from peewee import *
 
 import config
 from database import BaseModel
-
-from .plugin import Plugin
+from plugins.plugin import Plugin
 
 
 class Memory(BaseModel):

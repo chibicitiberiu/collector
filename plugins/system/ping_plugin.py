@@ -9,8 +9,7 @@ from playhouse.shortcuts import model_to_dict
 
 import config
 from database import BaseModel
-
-from .plugin import Plugin
+from plugins.plugin import Plugin
 
 
 class Ping(BaseModel):
@@ -43,7 +42,6 @@ class PingPlugin(Plugin):
             entry.ping = float(match.group(1))
 
         entry.save()
-        print(model_to_dict(entry))
 
     async def execute_internal(self):
         await asyncio.gather(*[self.do_ping(host) for host in config.PING_HOSTS])
