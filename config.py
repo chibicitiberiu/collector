@@ -49,3 +49,9 @@ PING_HOSTS = [
 
 # How often to send pings, as a number of INTERVALs
 PING_FREQUENCY = 10
+
+### ROBOR
+# Romanian Interbank Offer Rate
+ROBOR_FIELDS = [
+    'ROBOR 6M'
+]

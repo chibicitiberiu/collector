@@ -8,6 +8,7 @@ from plugins.system.disk_plugin import DiskPlugin
 from plugins.system.network_plugin import NetworkPlugin
 from plugins.system.temperatures_plugin import TemperaturesPlugin
 from plugins.system.ping_plugin import PingPlugin
+from plugins.finance.robor_plugin import RoborPlugin
 
 class Collector(object):
 
@@ -18,7 +19,10 @@ class Collector(object):
             DiskPlugin(),
             NetworkPlugin(),
             TemperaturesPlugin(),
-            PingPlugin()
+            PingPlugin(),
+
+            # finance
+            RoborPlugin()
         ]
         self.event = Event()
 

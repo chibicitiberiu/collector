@@ -1,1 +1,8 @@
 peewee
+
+# Used in most system plugins
+psutil
+
+# Finance plugins
+requests
+lxml
