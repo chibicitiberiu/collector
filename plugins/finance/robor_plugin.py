@@ -22,6 +22,9 @@ class RoborPlugin(Plugin):
     def __init__(self):
         self.__table = None
 
+    def get_interval(self):
+        return config.ROBOR_INTERVAL
+
     def get_column_index(self, table, column_name):
         header_row = table.find('tr')
         for elem in header_row.iter('th'):
@@ -74,7 +77,6 @@ class RoborPlugin(Plugin):
                 entry.field = field
                 entry.value = value
                 entry.save()
-                print(model_to_dict(entry))
 
 
 

@@ -28,46 +28,52 @@ class DiskIO(BaseModel):
     write_speed = FloatField(null=False)
 
 
-class DiskPlugin(Plugin):
-    models = [DiskUsage, DiskIO]
+class DiskUsagePlugin(Plugin):
+    models = [DiskUsage]
+
+    def get_interval(self):
+        return config.DISK_USAGE_INTERVAL
+
+    def execute(self):
+        for partition in psutil.disk_partitions():
+            usage = psutil.disk_usage(partition.mountpoint)
+            
+            entry = DiskUsage()
+            entry.partition = partition.device
+            entry.mountpoint = partition.mountpoint
+            entry.total = usage.total
+            entry.used = usage.used
+            entry.free = usage.free
+            entry.save()
+
+
+class DiskIOPlugin(Plugin):
+    models = [DiskIO]
 
     def __init__(self):
-        self.__i = 0
         self.__previous_io = {}
+
+    def get_interval(self):
+        return config.DISK_IO_INTERVAL
 
     def store_io(self, disk, current):
         previous = self.__previous_io.get(disk, current)
 
         entry = DiskIO()
         entry.disk = disk
-        entry.read_count = (current.read_count - previous.read_count) / config.INTERVAL
-        entry.write_count = (current.write_count - previous.write_count) / config.INTERVAL
-        entry.read_speed = (current.read_bytes - previous.read_bytes) / config.INTERVAL
-        entry.write_speed = (current.write_bytes - previous.write_bytes) / config.INTERVAL
+        entry.read_count = (current.read_count - previous.read_count) / self.get_interval()
+        entry.write_count = (current.write_count - previous.write_count) / self.get_interval()
+        entry.read_speed = (current.read_bytes - previous.read_bytes) / self.get_interval()
+        entry.write_speed = (current.write_bytes - previous.write_bytes) / self.get_interval()
         entry.save()
 
         self.__previous_io[disk] = current
 
     def execute(self):
 
-        # Collect disk usage
-        if (self.__i % config.DISK_SPACE_FREQUENCY) == 0:
-            for partition in psutil.disk_partitions():
-                usage = psutil.disk_usage(partition.mountpoint)
-                
-                entry = DiskUsage()
-                entry.partition = partition.device
-                entry.mountpoint = partition.mountpoint
-                entry.total = usage.total
-                entry.used = usage.used
-                entry.free = usage.free
-                entry.save()
-
-        # Collect IO
         self.store_io(None, psutil.disk_io_counters(perdisk=False))
 
         io_reads = psutil.disk_io_counters(perdisk=True)
         for disk, current in io_reads.items():
             self.store_io(disk, current)
 
-        self.__i += 1

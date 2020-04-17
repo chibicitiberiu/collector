@@ -22,6 +22,9 @@ class Temperatures(BaseModel):
 class TemperaturesPlugin(Plugin):
     models = [Temperatures]
 
+    def get_interval(self):
+        return config.TEMPERATURE_INTERVAL
+
     def execute(self):
         for sensor, temps in psutil.sensors_temperatures(config.TEMPERATURE_USE_FAHRENHEIT).items():
             for temp in temps:

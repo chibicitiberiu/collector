@@ -22,8 +22,10 @@ class PingPlugin(Plugin):
     models = [Ping]
 
     def __init__(self):
-        self.__timeout = config.INTERVAL // 3
-        self.__i = 0
+        self.__timeout = config.PING_INTERVAL // 3
+
+    def get_interval(self):
+        return config.PING_INTERVAL
 
     async def do_ping(self, host):
         command = ['ping', '-c', '1', '-W', str(self.__timeout), host]
@@ -47,13 +49,12 @@ class PingPlugin(Plugin):
         await asyncio.gather(*[self.do_ping(host) for host in config.PING_HOSTS])
 
     def execute(self):
-        if (self.__i % config.PING_FREQUENCY) == 0:
-            if getattr(asyncio, 'run', None) is not None:
-                # Python 3.7+
-                asyncio.run(self.execute_internal())
-            else:
-                loop = asyncio.get_event_loop()
-                loop.run_until_complete(self.execute_internal())
-                loop.close()
-        
-        self.__i += 1
+        if getattr(asyncio, 'run', None) is not None:
+            # Python 3.7+
+            asyncio.run(self.execute_internal())
+        else:
+            loop = asyncio.get_event_loop()
+            loop.run_until_complete(self.execute_internal())
+            loop.close()
+    
+    

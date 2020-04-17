@@ -27,6 +27,9 @@ class Cpu(BaseModel):
 class CpuPlugin(Plugin):
     models = [Cpu]
 
+    def get_interval(self):
+        return config.CPU_INTERVAL
+
     def store(self, cpu, times, freq):
         entry = Cpu()
         entry.cpu = cpu

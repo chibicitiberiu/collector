@@ -26,6 +26,9 @@ class Memory(BaseModel):
 class MemoryPlugin(Plugin):
     models = [Memory]
 
+    def get_interval(self):
+        return config.MEMORY_INTERVAL
+
     def execute(self):
         vmem = psutil.virtual_memory()
         swap = psutil.swap_memory()

@@ -1,5 +1,5 @@
 # Collect interval in seconds
-INTERVAL=30
+DEFAULT_INTERVAL = 30
 
 # Database URL, which defines connection settings.
 #
@@ -26,19 +26,30 @@ DATABASE_URL = 'sqlite:///data.db'
 
 
 ### CPU
+CPU_INTERVAL = DEFAULT_INTERVAL
 # Store statistics per CPU, not only combined
 CPU_PER_CPU = True
 
 ### Disk
-# How often to poll space information, as a number of INTERVALs
-DISK_SPACE_FREQUENCY = 10
+DISK_USAGE_INTERVAL = DEFAULT_INTERVAL * 10
+DISK_IO_INTERVAL = DEFAULT_INTERVAL
+
+### Memory
+MEMORY_INTERVAL = DEFAULT_INTERVAL
+
+### Network
+NETWORK_INTERVAL = DEFAULT_INTERVAL
 
 ### Temperatures
+TEMPERATURE_INTERVAL = DEFAULT_INTERVAL
+
 # If true, fahrenheit is used, otherwise celsius
 TEMPERATURE_USE_FAHRENHEIT = False
 
 ### Ping
 # Ping hosts
+PING_INTERVAL = 5 * 60              # every 5 min
+
 PING_HOSTS = [
     '10.0.0.1',
     '192.168.0.1',
@@ -47,11 +58,23 @@ PING_HOSTS = [
     'bing.com'
 ]
 
-# How often to send pings, as a number of INTERVALs
-PING_FREQUENCY = 10
+### Stocks
+STOCKS_INTERVAL = 12 * 60 * 60      # updates daily
+
+STOCKS_TICKERS = {
+    'MCRO.L' : 'Micro Focus International PLC',
+    '^GSPC' : 'S&P 500',
+    '^SPEUP' : 'S&P 350 Europe',
+    '^SPG1200' : 'S&P 1200 Global',
+    '^IXIC' : 'NASDAQ Composite',
+    'BTC-USD' : 'Bitcoin USD',
+    'ETH-USD' : 'Ethereum USD',
+}
 
 ### ROBOR
 # Romanian Interbank Offer Rate
+ROBOR_INTERVAL = 12 * 60 * 60       # updates daily, every 12 hours should be fine
+
 ROBOR_FIELDS = [
     'ROBOR 6M'
 ]

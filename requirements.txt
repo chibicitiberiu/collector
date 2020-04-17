@@ -1,8 +1,12 @@
+apscheduler
 peewee
 
 # Used in most system plugins
 psutil
 
-# Finance plugins
+# robor plugin
 requests
 lxml
+
+# stocks plugin
+yfinance
