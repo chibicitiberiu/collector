@@ -19,7 +19,7 @@ DEFAULT_INTERVAL = 30
 #   will create a PooledMySQLDatabase instance for the local MySQL database my_db with max_connections set to 20 and a
 #   stale_timeout setting of 300 seconds.
 
-DATABASE_URL = 'sqlite:///data.db'
+DATABASE_URL = 'postgresql://system_metrics_collector:theMetrixWriteer2123@localhost:5432/system_metrics'
 
 
 # Plugin configuration
@@ -55,7 +55,8 @@ PING_HOSTS = [
     '192.168.0.1',
     '1.1.1.1',
     'google.com',
-    'bing.com'
+    'bing.com',
+    'tibich.com'
 ]
 
 ### Stocks

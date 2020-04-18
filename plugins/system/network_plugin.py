@@ -11,7 +11,7 @@ from plugins.plugin import Plugin
 
 
 class NetworkIO(BaseModel):
-    time = DateTimeField(index=True, default=datetime.now)
+    time = DateTimeField(index=True, default=datetime.utcnow)
     nic = TextField(null=True)
     packets_sent = FloatField(null=False)     # all values are per second
     packets_recv = FloatField(null=False)

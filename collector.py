@@ -1,17 +1,20 @@
+import logging
+import signal
+from datetime import datetime, timedelta
+from threading import Event
+
+from apscheduler.schedulers.blocking import BlockingScheduler
+
 import config
 import database
-import signal
-from apscheduler.schedulers.blocking import BlockingScheduler
-from threading import Event
-from plugins.system.cpu_plugin import CpuPlugin
-from plugins.system.memory_plugin import MemoryPlugin
-from plugins.system.disk_plugin import DiskIOPlugin, DiskUsagePlugin
-from plugins.system.network_plugin import NetworkPlugin
-from plugins.system.temperatures_plugin import TemperaturesPlugin
-from plugins.system.ping_plugin import PingPlugin
-from plugins.finance.stocks_plugin import StocksPlugin
 from plugins.finance.robor_plugin import RoborPlugin
-import logging
+from plugins.finance.stocks_plugin import StocksPlugin
+from plugins.system.cpu_plugin import CpuPlugin
+from plugins.system.disk_plugin import DiskIOPlugin, DiskUsagePlugin
+from plugins.system.memory_plugin import MemoryPlugin
+from plugins.system.network_plugin import NetworkPlugin
+from plugins.system.ping_plugin import PingPlugin
+from plugins.system.temperatures_plugin import TemperaturesPlugin
 
 
 class Collector(object):
@@ -41,8 +44,11 @@ class Collector(object):
         return models
 
     def schedule_plugins(self):
+        start_date = datetime.now() + timedelta(seconds=10)
         for plugin in self.plugins:
-            self.scheduler.add_job(plugin.execute, 'interval', seconds=plugin.get_interval())
+            self.scheduler.add_job(plugin.execute, 'interval', 
+                                   seconds=plugin.get_interval(),
+                                   start_date=start_date)
 
     def run(self):
         logging.basicConfig()
@@ -53,22 +59,18 @@ class Collector(object):
         database.DB.create_tables(models)
 
         self.schedule_plugins()
-        # signal.signal(signal.SIGHUP, self.abort)
-        # signal.signal(signal.SIGTERM, self.abort)
-        # signal.signal(signal.SIGINT, self.abort)
-        print(f'Started.')
+        logging.info('Started.')
 
         try:
             self.scheduler.start()
         except (KeyboardInterrupt, SystemExit):
             pass
 
-        print(f'Stopped.')
-
-    def abort(self, signum, frame):
-        print(f'Received signal {signum}, aborting...')
-        self.event.set()
+        logging.info(f'Stopped.')
 
 
 if __name__ == "__main__":
-    Collector().run()
+    try:
+        Collector().run()
+    except BaseException as ex:
+        logging.critical("Unhandled exception.", exc_info=ex)

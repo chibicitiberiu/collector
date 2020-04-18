@@ -1,6 +1,9 @@
 apscheduler
 peewee
 
+# used for databases
+psycopg2-binary
+
 # Used in most system plugins
 psutil
 

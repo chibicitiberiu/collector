@@ -11,7 +11,7 @@ from plugins.plugin import Plugin
 
 
 class DiskUsage(BaseModel):
-    time = DateTimeField(index=True, default=datetime.now)
+    time = DateTimeField(index=True, default=datetime.utcnow)
     partition = TextField(null=False)
     mountpoint = TextField(null=False)
     total = BigIntegerField(null=False)
@@ -20,7 +20,7 @@ class DiskUsage(BaseModel):
 
 
 class DiskIO(BaseModel):
-    time = DateTimeField(index=True, default=datetime.now)
+    time = DateTimeField(index=True, default=datetime.utcnow)
     disk = TextField(null=True)
     read_count = FloatField(null=False)     # all values are per second
     write_count = FloatField(null=False)

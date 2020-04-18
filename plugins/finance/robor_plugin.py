@@ -11,7 +11,7 @@ from plugins.plugin import Plugin
 
 
 class Robor(BaseModel):
-    date = DateField(index=True, default=datetime.date.today(), null=False)
+    date = DateField(index=True, default=datetime.date.today, null=False)
     field = TextField(null=False)
     value = FloatField(null=False)
 

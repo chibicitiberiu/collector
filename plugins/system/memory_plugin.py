@@ -9,7 +9,7 @@ from plugins.plugin import Plugin
 
 
 class Memory(BaseModel):
-    time = DateTimeField(index=True, default=datetime.now)
+    time = DateTimeField(index=True, default=datetime.utcnow)
     total = BigIntegerField(null=False)
     available = BigIntegerField(null=False)
     used = BigIntegerField(null=False)

@@ -10,7 +10,7 @@ from plugins.plugin import Plugin
 
 
 class Cpu(BaseModel):
-    time = DateTimeField(index=True, default=datetime.now)
+    time = DateTimeField(index=True, default=datetime.utcnow)
     cpu = SmallIntegerField(null=True)
     idle_pct = FloatField(null=False)
     user_pct = FloatField(null=False)

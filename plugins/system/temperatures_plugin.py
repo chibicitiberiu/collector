@@ -11,7 +11,7 @@ from plugins.plugin import Plugin
 
 
 class Temperatures(BaseModel):
-    time = DateTimeField(index=True, default=datetime.now)
+    time = DateTimeField(index=True, default=datetime.utcnow)
     sensor = TextField(null=False)
     sensor_label = TextField(null=False)
     current = FloatField(null=False)     # all values are per second
