@@ -15,6 +15,7 @@ from plugins.system.memory_plugin import MemoryPlugin
 from plugins.system.network_plugin import NetworkPlugin
 from plugins.system.ping_plugin import PingPlugin
 from plugins.system.temperatures_plugin import TemperaturesPlugin
+from plugins.system.speedtest_plugin import SpeedtestPlugin
 
 
 class Collector(object):
@@ -29,6 +30,7 @@ class Collector(object):
             NetworkPlugin(),
             TemperaturesPlugin(),
             PingPlugin(),
+            SpeedtestPlugin(),
 
             # finance
             StocksPlugin(),
@@ -46,9 +48,10 @@ class Collector(object):
     def schedule_plugins(self):
         start_date = datetime.now() + timedelta(seconds=10)
         for plugin in self.plugins:
-            self.scheduler.add_job(plugin.execute, 'interval', 
+            self.scheduler.add_job(plugin.execute_wrapper, 'interval', 
                                    seconds=plugin.get_interval(),
-                                   start_date=start_date)
+                                   start_date=start_date,
+                                   name=plugin.__class__.__name__)
 
     def run(self):
         logging.basicConfig()
@@ -56,7 +59,8 @@ class Collector(object):
 
         models = self.collect_models()
         database.initialize_db()
-        database.DB.create_tables(models)
+        with database.DB.connection_context():
+            database.DB.create_tables(models)
 
         self.schedule_plugins()
         logging.info('Started.')

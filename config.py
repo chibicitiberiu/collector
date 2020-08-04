@@ -59,6 +59,9 @@ PING_HOSTS = [
     'tibich.com'
 ]
 
+### Speedtest
+SPEEDTEST_INTERVAL = 15 * 60        # every 15 min
+
 ### Stocks
 STOCKS_INTERVAL = 12 * 60 * 60      # updates daily
 

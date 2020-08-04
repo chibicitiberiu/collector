@@ -7,6 +7,9 @@ psycopg2-binary
 # Used in most system plugins
 psutil
 
+# Used by SMART plugin, requires 'smartmontools' installed + root access
+pySMART
+
 # robor plugin
 requests
 lxml

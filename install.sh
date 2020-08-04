@@ -33,6 +33,7 @@ After=network.target
 
 [Service]
 Type=simple
+User=$USER
 Restart=always
 RestartSec=1
 ExecStart=/usr/bin/env python3 $(pwd)/collector.py

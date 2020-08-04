@@ -1,5 +1,6 @@
 from peewee import DatabaseProxy, Model
 from playhouse.db_url import connect
+from playhouse.pool import PooledPostgresqlExtDatabase
 import config
 
 DB = DatabaseProxy()
