@@ -1,6 +1,6 @@
 # Tibi Collector
 
-A really lightweight and easy to configure alternative to collectord.
+A really lightweight and easy to configure alternative to collectd.
 
 ## Motivation
 
