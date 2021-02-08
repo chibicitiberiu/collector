@@ -29,19 +29,25 @@ DATABASE_URL = 'postgresql://system_metrics_collector:theMetrixWriteer2123@local
 CPU_INTERVAL = DEFAULT_INTERVAL
 # Store statistics per CPU, not only combined
 CPU_PER_CPU = True
+CPU_RETAIN_DAYS = 180
 
 ### Disk
 DISK_USAGE_INTERVAL = DEFAULT_INTERVAL * 10
+DISK_USAGE_RETAIN_DAYS = 365*50
 DISK_IO_INTERVAL = DEFAULT_INTERVAL
+DISK_IO_RETAIN_DAYS = 180
 
 ### Memory
 MEMORY_INTERVAL = DEFAULT_INTERVAL
+MEMORY_RETAIN_DAYS = 365 * 5
 
 ### Network
 NETWORK_INTERVAL = DEFAULT_INTERVAL
+NETWORK_RETAIN_DAYS = 180
 
 ### Temperatures
 TEMPERATURE_INTERVAL = DEFAULT_INTERVAL
+TEMPERATURE_RETAIN_DAYS = 365 * 5
 
 # If true, fahrenheit is used, otherwise celsius
 TEMPERATURE_USE_FAHRENHEIT = False
@@ -59,8 +65,11 @@ PING_HOSTS = [
     'tibich.com'
 ]
 
+PING_RETAIN_DAYS = 365 * 50
+
 ### Speedtest
-SPEEDTEST_INTERVAL = 15 * 60        # every 15 min
+SPEEDTEST_INTERVAL = 10 * 60        # every 10 min
+SPEEDTEST_RETAIN_DAYS = 365 * 50
 
 ### Stocks
 STOCKS_INTERVAL = 12 * 60 * 60      # updates daily
@@ -75,9 +84,12 @@ STOCKS_TICKERS = {
     'ETH-USD' : 'Ethereum USD',
 }
 
+STOCKS_RETAIN_DAYS = 365 * 50
+
 ### ROBOR
 # Romanian Interbank Offer Rate
 ROBOR_INTERVAL = 12 * 60 * 60       # updates daily, every 12 hours should be fine
+ROBOR_RETAIN_DAYS = 365 * 50
 
 ROBOR_FIELDS = [
     'ROBOR 6M'

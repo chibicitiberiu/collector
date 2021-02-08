@@ -1,5 +1,5 @@
 from collections import namedtuple
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import psutil
 from peewee import *
@@ -48,3 +48,7 @@ class NetworkPlugin(Plugin):
         io_reads = psutil.net_io_counters(pernic=True)
         for nic, current in io_reads.items():
             self.store_io(nic, current)
+
+    def cleanup(self):
+        limit = datetime.utcnow() - timedelta(days=config.NETWORK_RETAIN_DAYS)
+        return NetworkIO.delete().where(NetworkIO.time < limit).execute()

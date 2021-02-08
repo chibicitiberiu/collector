@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import psutil
 from peewee import *
@@ -46,3 +46,7 @@ class MemoryPlugin(Plugin):
         entry.swap_free = swap.free
         entry.swap_used = swap.used
         entry.save()
+
+    def cleanup(self):
+        limit = datetime.utcnow() - timedelta(days=config.MEMORY_RETAIN_DAYS)
+        return Memory.delete().where(Memory.time < limit).execute()

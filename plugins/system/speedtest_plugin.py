@@ -1,7 +1,7 @@
 import subprocess
 import re
 import subprocess
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import psutil
 from peewee import *
@@ -53,5 +53,8 @@ class SpeedtestPlugin(Plugin):
         else:
             logging.error(f"SpeedTest nonzero return: {proc.returncode}\n-----\n{stdout}\n{stderr}\n\n")
             
-
         entry.save()
+
+    def cleanup(self):
+        limit = datetime.utcnow() - timedelta(days=config.SPEEDTEST_RETAIN_DAYS)
+        return Speedtest.delete().where(Speedtest.time < limit).execute()

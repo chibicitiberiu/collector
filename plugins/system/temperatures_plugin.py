@@ -1,5 +1,5 @@
 from collections import namedtuple
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import psutil
 from peewee import *
@@ -35,3 +35,7 @@ class TemperaturesPlugin(Plugin):
                 entry.high = temp.high
                 entry.critical = temp.critical
                 entry.save()
+
+    def cleanup(self):
+        limit = datetime.utcnow() - timedelta(days=config.TEMPERATURE_RETAIN_DAYS)
+        return Temperatures.delete().where(Temperatures.time < limit).execute()

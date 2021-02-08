@@ -53,8 +53,16 @@ class Collector(object):
                                    start_date=start_date,
                                    name=plugin.__class__.__name__)
 
+    def schedule_cleanup(self):
+        start_date = datetime.now() + timedelta(seconds=100)
+        self.scheduler.add_job(self.cleanup, 'interval', 
+                               hours=24,
+                               start_date=start_date,
+                               name='Cleanup')
+
     def run(self):
         logging.basicConfig()
+        logging.getLogger().setLevel(logging.INFO)
         logging.getLogger('apscheduler').setLevel(logging.INFO)
 
         models = self.collect_models()
@@ -63,6 +71,7 @@ class Collector(object):
             database.DB.create_tables(models)
 
         self.schedule_plugins()
+        self.schedule_cleanup()
         logging.info('Started.')
 
         try:
@@ -72,6 +81,15 @@ class Collector(object):
 
         logging.info(f'Stopped.')
 
+    def cleanup(self):
+        for plugin in self.plugins:
+            logging.info(f'Cleaning up {plugin.__class__.__name__}...')
+            try:
+                items = plugin.cleanup_wrapper()
+                logging.info(f'... deleted {items} entries')
+            except BaseException as e:
+                logging.error("Cleanup error:", exc_info=e)
+                pass
 
 if __name__ == "__main__":
     try:

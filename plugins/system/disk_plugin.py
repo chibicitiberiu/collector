@@ -1,5 +1,5 @@
 from collections import namedtuple
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import psutil
 from peewee import *
@@ -46,6 +46,10 @@ class DiskUsagePlugin(Plugin):
             entry.free = usage.free
             entry.save()
 
+    def cleanup(self):
+        limit = datetime.utcnow() - timedelta(days=config.DISK_USAGE_RETAIN_DAYS)
+        return DiskUsage.delete().where(DiskUsage.time < limit).execute()
+
 
 class DiskIOPlugin(Plugin):
     models = [DiskIO]
@@ -77,3 +81,6 @@ class DiskIOPlugin(Plugin):
         for disk, current in io_reads.items():
             self.store_io(disk, current)
 
+    def cleanup(self):
+        limit = datetime.utcnow() - timedelta(days=config.DISK_IO_RETAIN_DAYS)
+        return DiskIO.delete().where(DiskIO.time < limit).execute()

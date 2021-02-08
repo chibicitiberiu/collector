@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import psutil
 from peewee import *
@@ -53,3 +53,7 @@ class CpuPlugin(Plugin):
             freqs = psutil.cpu_freq(percpu=True)
             for i in range(len(times)):
                 self.store(i, times[i], freqs[i])
+
+    def cleanup(self):
+        limit = datetime.utcnow() - timedelta(days=config.CPU_RETAIN_DAYS)
+        return Cpu.delete().where(Cpu.time < limit).execute()
